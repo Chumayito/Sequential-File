@@ -312,13 +312,27 @@ void SequentialFile<KeyType>::rebuild() {
     else head_ptr = RecordPointer();
 }
 
-// =====================================================================
-// INSTANCIACION EXPLICITA (EL TRUCO PARA EVITAR ERRORES DE LINKER)
-// =====================================================================
-// Aqui le decimos al compilador que genere el codigo binario
-// especificamente para cuando KeyType es un int.
-// Si tu Parser luego usa strings u otra cosa como Primary Key,
-// solo agregas otra linea aqui abajo (ej: template class SequentialFile<std::string>;)
+template <typename KeyType>
+std::vector<Record<KeyType>> SequentialFile<KeyType>::scanAll() {
+    data_file.reset_stats();
+    aux_file.reset_stats();
+
+    std::vector<Record<KeyType>> results;
+    RecordPointer current_ptr = head_ptr;
+    Page<KeyType> current_page;
+
+    while (!current_ptr.is_null()) {
+        fetch_page(current_ptr, current_page);
+        Record<KeyType>& rec = current_page.records[current_ptr.record_idx];
+
+        if (!rec.is_deleted) {
+            results.push_back(rec);
+        }
+        current_ptr = rec.next_ptr;
+    }
+
+    return results;
+}
 
 template class SequentialFile<int>;
 template void DiskManager::read_page<int>(long, Page<int>&);
