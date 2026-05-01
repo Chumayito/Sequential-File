@@ -94,12 +94,12 @@ private:
 
 public:
     SequentialFile(const std::string& data_name, const std::string& aux_name, size_t k = 50);
-
     std::pair<Record<KeyType>, int> search(KeyType search_key);
     void add(const Record<KeyType>& new_record);
     void remove(KeyType key);
     std::vector<Record<KeyType>> rangeSearch(KeyType begin_key, KeyType end_key);
     void rebuild();
+    std::vector<Record<KeyType>> scanAll();
 };
 
 #endif // SEQUENTIAL_FILE_H
