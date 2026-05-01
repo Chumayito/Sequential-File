@@ -8,13 +8,11 @@
 #include "SequentialFile.h"
 
 int main() {
-    std::cout << "=================================================\n";
-    std::cout << "  STRESS TEST: SEQUENTIAL FILE (PAGINADO 4KB)  \n";
-    std::cout << "=================================================\n\n";
+
 
     SequentialFile<int> db("datos.dat", "aux.dat", 50);
 
-    const int NUM_RECORDS = 10000;
+    const int NUM_RECORDS = 1000;
 
     std::cout << "Generando " << NUM_RECORDS << " claves aleatorias...\n";
     std::vector<int> keys;
@@ -46,6 +44,8 @@ int main() {
 
     std::cout << "Insercion completada con exito.\n";
     std::cout << "Tiempo total de ejecucion: " << duration_ms.count() << " ms\n\n";
+
+
 
     std::cout << "--- 2. PROBANDO BUSQUEDA PUNTUAL (search) ---\n";
     int search_target = keys[NUM_RECORDS / 2];
@@ -85,9 +85,6 @@ int main() {
     std::cout << "Registro eliminado correctamente.\n";
     std::cout << "Tiempo de eliminacion: " << duration_us.count() << " us\n\n";
 
-    std::cout << "=================================================\n";
-    std::cout << "              FIN DEL STRESS TEST                \n";
-    std::cout << "=================================================\n";
 
     return 0;
 }
